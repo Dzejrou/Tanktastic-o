@@ -268,7 +268,9 @@ void Server::send_all(sf::Packet& packet, int id)
 {
     for(auto it = clients_.begin(); it != clients_.end(); ++it)
     {
-        if((*it)->id != id)
+        if(*it == nullptr)
+            std::cout << "[Error] Sending to disconnected player." << std::endl;
+        else if((*it)->id != id)
             (*it)->socket.send(packet);
     }
 }
@@ -286,6 +288,10 @@ int Server::get_new_id()
     return -1; // No free space.
 }
 
+/**
+ * Brief: Removes client with the given ID.
+ * Param: The ID of the client that is to be removed.
+ */
 void Server::remove_client(int id)
 {
     auto it = clients_.begin();
