@@ -59,8 +59,7 @@ void Server::run()
                 {
                     if(client == nullptr)
                         std::cout << "got a null client" << std::endl;
-                    else
-                    if(selector_.isReady(client->socket))
+                    else if(selector_.isReady(client->socket))
                     {
                         sf::Packet packet;
                         if(client->socket.receive(packet) == sf::Socket::Done)
@@ -300,16 +299,20 @@ void Server::remove_client(int id)
     auto it = clients_.begin();
     while(it != clients_.end())
     {
+        if((*it) == nullptr)
+        { // Also check for nullptrs.
+            std::cout << "[Warning] A nullptr client found."
+                << std::endl;
+            it = clients_.erase(it);
+        }
+
         /**
          * Note: I do not break if the client
          *       is found, in case there was somehow a
          *       duplicate.
          */
         if((*it)->id == id) // Found it!
-        {
             it = clients_.erase(it);
-            std::cout << "Erased a client!" << std::endl;
-        }
         else
             ++it;
     }
