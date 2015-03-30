@@ -230,7 +230,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             auto it = clients_.begin();
             while(it != clients_.end())
             {
-                if(it->id == id) // Found it!
+                if((*it)->id == id) // Found it!
                 {
                     clients_.erase(it);
                     break;
