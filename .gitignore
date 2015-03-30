@@ -1,2 +1,4 @@
 *.o
 SFML/*
+ttc_server
+ttc_client
