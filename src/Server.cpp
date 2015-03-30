@@ -230,11 +230,13 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             auto it = clients_.begin();
             while(it != clients_.end())
             {
+                /**
+                 * Note: I do not break if the client
+                 *       is found, in case there was somehow a
+                 *       duplicate.
+                 */
                 if((*it)->id == id) // Found it!
-                {
-                    clients_.erase(it);
-                    break;
-                }
+                    it = clients_.erase(it);
                 else
                     ++it;
             }
