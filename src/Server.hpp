@@ -24,6 +24,7 @@ class Server
         ~Server() { listener_.close(); }
     private:
         int get_new_id();
+        void remove_client(int);
         
         sf::SocketSelector                      selector_;
         sf::TcpListener                         listener_;

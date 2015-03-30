@@ -209,7 +209,8 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
         { // Delete player and inform others.
             uint32 id_killer;
             packet >> id_killer;
-            plr_[id].reset(nullptr);
+            plr_[id].reset(nullptr); // Get rid of the tank.
+            remove_client(id); // Get rid of the client.
             std::cout << "Player with id=" << id
                 << " was killed by player with id="
                 << static_cast<int>(id_killer)
@@ -225,22 +226,10 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
         }
         case PROTOCOL::PLR_QUIT:
         { // TODO: Time-out.
-            plr_[id].reset(nullptr); // Get rid of him.
+            plr_[id].reset(nullptr); // Get rid of the tank.
             
             // Get rid of the client.
-            auto it = clients_.begin();
-            while(it != clients_.end())
-            {
-                /**
-                 * Note: I do not break if the client
-                 *       is found, in case there was somehow a
-                 *       duplicate.
-                 */
-                if((*it)->id == id) // Found it!
-                    it = clients_.erase(it);
-                else
-                    ++it;
-            }
+            remove_client(id);
 
             packet.clear();
             packet << head << id32;
@@ -295,4 +284,21 @@ int Server::get_new_id()
             return i;
     }
     return -1; // No free space.
+}
+
+void Server::remove_client(int id)
+{
+    auto it = clients_.begin();
+    while(it != clients_.end())
+    {
+        /**
+         * Note: I do not break if the client
+         *       is found, in case there was somehow a
+         *       duplicate.
+         */
+        if((*it)->id == id) // Found it!
+            it = clients_.erase(it);
+        else
+            ++it;
+    }
 }
