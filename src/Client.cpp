@@ -56,11 +56,13 @@ Client::Client(std::string a, int p, std::string n, bool& rematch,
         packet >> head;
         if(head == PROTOCOL::START)
         {
+            std::cout << "[Status] Got START info." << std::endl;
             /* Get the id and position. */
             uint32 tmp;
             sf::Vector2f position;
             packet >> tmp;
             id_ = static_cast<int>(tmp);
+            std::cout << "[Status] Got ID #" << id_ << "." << std::endl;
             packet >> position;
             plr_[id_].reset(new Tank(id_, 0));
             plr_[id_]->setPosition(position);
