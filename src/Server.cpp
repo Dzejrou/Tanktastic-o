@@ -212,7 +212,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             uint32 id_killer;
             packet >> id_killer;
             plr_[id].reset(nullptr); // Get rid of the tank.
-            remove_client(id); // Get rid of the client.
+            //remove_client(id); // Get rid of the client.
             std::cout << "Player with id=" << id
                 << " was killed by player with id="
                 << static_cast<int>(id_killer)
@@ -314,16 +314,5 @@ void Server::remove_client(int id)
             it = clients_.erase(it);
         else
             ++it;
-    }
-
-    it = clients_.begin();
-    while(it != clients_.end())
-    {
-        if(*it == nullptr)
-        {
-            std::cout << "found nullptr during recheck" << std::endl;
-            it = clients_.erase(it);
-        }
-        else ++it;
     }
 }
