@@ -57,6 +57,9 @@ void Server::run()
             {
                 for(const auto& client : clients_)
                 {
+                    if(client == nullptr)
+                        std::cout << "got a null client" << std::endl;
+                    else
                     if(selector_.isReady(client->socket))
                     {
                         sf::Packet packet;
@@ -222,7 +225,6 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
 
             /* Increment the score for new players. */
             plr_[static_cast<int>(id_killer)]->add_point();
-            std::cout << "finished destroying" << std::endl;
             break;
         }
         case PROTOCOL::PLR_QUIT:
