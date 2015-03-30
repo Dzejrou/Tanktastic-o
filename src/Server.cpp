@@ -306,7 +306,10 @@ void Server::remove_client(int id)
          *       duplicate.
          */
         if((*it)->id == id) // Found it!
+        {
             it = clients_.erase(it);
+            std::cout << "Erased a client!" << std::endl;
+        }
         else
             ++it;
     }
