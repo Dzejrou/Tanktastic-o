@@ -25,9 +25,12 @@ void Server::run()
         {
             if(selector_.isReady(listener_)) // Check for a pending connection.
             {
+                std::cout << "Listener ready." << std::endl;
                 std::unique_ptr<client> tmp_client{new client};
+                std::cout << "Accepting him." << std::endl;
                 if(listener_.accept(tmp_client->socket) == sf::Socket::Done)
                 {
+                    std::cout << "Connection established." << std::endl;
                     if((tmp_id = get_new_id()) != -1) // Free plr slots.
                     {
                         /* A check: */
@@ -37,11 +40,9 @@ void Server::run()
 
                         /* Add the client to the client list. */
                         tmp_client->id = tmp_id;
+                        selector_.add(tmp_client->socket);
                         clients_.push_back(std::move(tmp_client));
 
-                        // Make the selector to listen to this socket.
-                        selector_.add(clients_.back()->socket);
-                        
                         init(*(clients_.back()));
                         std::cout << "Player with id=" << tmp_id
                             << " has joined the game." << std::endl;
