@@ -240,7 +240,9 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
                     it = clients_.erase(it);
                 else
                     ++it;
+                std::cout << "looking for client to delete" << std::endl;
             }
+            std::cout << "Finished deleting client." << std::endl;
 
             packet.clear();
             packet << head << id32;
