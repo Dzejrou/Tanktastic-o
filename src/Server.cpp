@@ -235,6 +235,8 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
                     clients_.erase(it);
                     break;
                 }
+                else
+                    ++it;
             }
 
             packet.clear();
