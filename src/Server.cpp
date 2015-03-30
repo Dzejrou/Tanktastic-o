@@ -305,15 +305,25 @@ void Server::remove_client(int id)
                 << std::endl;
             it = clients_.erase(it);
         }
-
         /**
          * Note: I do not break if the client
          *       is found, in case there was somehow a
          *       duplicate.
          */
-        if((*it)->id == id) // Found it!
+        else if((*it)->id == id) // Found it!
             it = clients_.erase(it);
         else
             ++it;
+    }
+
+    it = clients_.begin();
+    while(it != clients_.end())
+    {
+        if(*it == nullptr)
+        {
+            std::cout << "found nullptr during recheck" << std::endl;
+            it = clients_.erase(it);
+        }
+        else ++it;
     }
 }
