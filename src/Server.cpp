@@ -30,13 +30,18 @@ void Server::run()
                 {
                     if((tmp_id = get_new_id()) != -1) // Free plr slots.
                     {
-                        // Add the client to the client list.
+                        /* A check: */
+                        if(plr_[tmp_id] != nullptr)
+                            std::cout << "[Error] Gave an ID"
+                                << " that is in use." << std::endl;
+
+                        /* Add the client to the client list. */
+                        tmp_client->id = tmp_id;
                         clients_.push_back(std::move(tmp_client));
 
                         // Make the selector to listen to this socket.
                         selector_.add(clients_.back()->socket);
                         
-                        clients_.back()->id = tmp_id;
                         init(*(clients_.back()));
                         std::cout << "Player with id=" << tmp_id
                             << " has joined the game." << std::endl;
@@ -220,6 +225,17 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
         case PROTOCOL::PLR_QUIT:
         { // TODO: Time-out.
             plr_[id].reset(nullptr); // Get rid of him.
+            
+            // Get rid of the client.
+            auto it = clients_.begin();
+            while(it != clients_.end())
+            {
+                if(it->id == id) // Found it!
+                {
+                    clients_.erase(it);
+                    break;
+                }
+            }
 
             packet.clear();
             packet << head << id32;
