@@ -231,7 +231,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             plr_[id].reset(nullptr); // Get rid of the tank.
             
             // Get rid of the client.
-            remove_client(id);
+            //remove_client(id);
 
             packet.clear();
             packet << head << id32;
