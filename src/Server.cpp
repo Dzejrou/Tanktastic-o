@@ -240,9 +240,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
                     it = clients_.erase(it);
                 else
                     ++it;
-                std::cout << "looking for client to delete" << std::endl;
             }
-            std::cout << "Finished deleting client." << std::endl;
 
             packet.clear();
             packet << head << id32;
@@ -279,10 +277,10 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
  */
 void Server::send_all(sf::Packet& packet, int id)
 {
-    for(std::size_t i = 0; i < clients_.size(); ++i) // Need index.
+    for(auto it = clients_.begin(); it != clients_.end(); ++it)
     {
-        if(clients_[i]->id != id)
-            clients_[i]->socket.send(packet);
+        if((*it)->id != id)
+            (*it)->socket.send(packet);
     }
 }
 
