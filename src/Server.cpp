@@ -36,6 +36,7 @@ void Server::run()
                                 << " that is in use." << std::endl;
 
                         /* Add the client to the client list. */
+                        std::cout << "got a client" << std::endl;
                         tmp_client->id = tmp_id;
                         clients_.push_back(std::move(tmp_client));
 
