@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case $1 in
+    -s | --server ) export LD_LIBRARY_PATH=$(pwd)/SFML/lib && ./ttc_server
+	                ;;
+    -c | --client ) export LD_LIBRARY_PATH=$(pwd)/SFML/lib && ./ttc_client
+	                ;;
+	-h | --help )   echo "Parameters:"
+	                echo "-s | --server : Starts the server."
+	                echo "-c | --client : Runs the client app."
+	                echo "-h | --help   : Shows this help:)"
+	                ;;
+	*)              echo "Invalid parameter, try -h for help."
+	                ;;
+esac
