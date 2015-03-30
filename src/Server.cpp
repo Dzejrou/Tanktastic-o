@@ -222,6 +222,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
 
             /* Increment the score for new players. */
             plr_[static_cast<int>(id_killer)]->add_point();
+            std::cout << "finished destroying" << std::endl;
             break;
         }
         case PROTOCOL::PLR_QUIT:
@@ -266,7 +267,6 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
  */
 void Server::send_all(sf::Packet& packet, int id)
 {
-    std::cout << "sending" << std::endl;
     for(auto it = clients_.begin(); it != clients_.end(); ++it)
     {
         if(*it == nullptr)
@@ -274,7 +274,6 @@ void Server::send_all(sf::Packet& packet, int id)
         else if((*it)->id != id)
             (*it)->socket.send(packet);
     }
-    std::cout << "finished sending" << std::endl;
 }
 
 /**
@@ -296,7 +295,6 @@ int Server::get_new_id()
  */
 void Server::remove_client(int id)
 {
-    std::cout << "removing" << std::endl;
     auto it = clients_.begin();
     while(it != clients_.end())
     {
@@ -310,5 +308,4 @@ void Server::remove_client(int id)
         else
             ++it;
     }
-    std::cout << "finished removing" << std::endl;
 }
