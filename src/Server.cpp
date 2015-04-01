@@ -25,12 +25,9 @@ void Server::run()
         {
             if(selector_.isReady(listener_)) // Check for a pending connection.
             {
-                std::cout << "Listener ready." << std::endl;
                 std::unique_ptr<client> tmp_client{new client};
-                std::cout << "Accepting him." << std::endl;
                 if(listener_.accept(tmp_client->socket) == sf::Socket::Done)
                 {
-                    std::cout << "Connection established." << std::endl;
                     if((tmp_id = get_new_id()) != -1) // Free plr slots.
                     {
                         /* A check: */
