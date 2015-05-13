@@ -22,8 +22,8 @@ void Server::run()
     int tmp_id;
     while(running_)
     {
-        if(selector_.wait()) // Waiting for data.
-        {
+        if(selector_.wait(sf::seconds(1.f/60.f))) // Waiting for data
+        {                                         // with timeout of one frame.
             if(selector_.isReady(listener_)) // Check for a pending connection.
             {
                 std::unique_ptr<client> tmp_client{new client};
