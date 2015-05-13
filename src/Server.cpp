@@ -7,7 +7,7 @@
  * Param: Port which the players will connect to.
  */
 Server::Server(std::string a, int p)
-    : address_{a}, port_{p}, time_out_{sf::seconds(120.f)},
+    : address_{a}, port_{p}, time_out_{sf::seconds(60.f)},
       mov_check_{sf::seconds(2.f)}
 {
     listener_.listen(port_);
@@ -88,7 +88,12 @@ void Server::run()
                     packet.clear();
                 }
                 else
+                {
+                    std::cout << "[Status] Kicking client #" << c->id
+                        << std::endl;
                     kick(c);
+                    remove_client(c->id);
+                }
             }
             disc_clock_.restart();
         }
@@ -374,7 +379,4 @@ void Server::kick(std::unique_ptr<client>& c)
     uint32 tmp = static_cast<uint32>(c->id);
     packet << PROTOCOL::PLR_QUIT << tmp;
     send_all(packet, c->id);
-
-    // Delete the client.
-    remove_client(c->id);
 }
