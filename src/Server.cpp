@@ -78,21 +78,24 @@ void Server::run()
             // kick them.
             for(auto& c : clients_)
             {
-                if(not_afk_[c->id])
+                if(c != nullptr)
                 {
-                    not_afk_[c->id] = false;
-                    // The id is just a dummy.
-                    packet << PROTOCOL::AFK_CHECK
-                        << static_cast<uint32>(c->id);
-                    c->socket.send(packet);
-                    packet.clear();
-                }
-                else
-                {
-                    std::cout << "[Status] Kicking client #" << c->id
-                        << std::endl;
-                    kick(c);
-                    remove_client(c->id);
+                    if(not_afk_[c->id])
+                    {
+                        not_afk_[c->id] = false;
+                        // The id is just a dummy.
+                        packet << PROTOCOL::AFK_CHECK
+                            << static_cast<uint32>(c->id);
+                        c->socket.send(packet);
+                        packet.clear();
+                    }
+                    else
+                    {
+                        std::cout << "[Status] Kicking client #" << c->id
+                            << std::endl;
+                        kick(c);
+                        remove_client(c->id);
+                    }
                 }
             }
             disc_clock_.restart();
@@ -104,9 +107,12 @@ void Server::run()
             packet.clear(); // Just to be sure.
             for(std::size_t i = 0; i < plr_max_; ++i)
             {
-                packet << PROTOCOL::PLR_NEW_POSITION << plr_[i]->getPosition();
-                send_all(packet, i); // Inform others about the new position.
-                packet.clear();
+                if(plr_[i] != nullptr)
+                {
+                    packet << PROTOCOL::PLR_NEW_POSITION << plr_[i]->getPosition();
+                    send_all(packet, i); // Inform others about the new position.
+                    packet.clear();
+                }
             }
             mov_check_clock_.restart();
         }
