@@ -1,5 +1,6 @@
 #include "src/Client.hpp"
 #include <iostream>
+#include <string>
 
 int main()
 {
@@ -19,6 +20,8 @@ int main()
         ip_addr = sf::IpAddress::getPublicAddress();
     else if(addr == "lh" || addr == "localhost")
         ip_addr = sf::IpAddress{"127.0.0.1"};
+    else if(addr == "mff")
+        ip_addr = sf::IpAddress{"195.113.21.150"};
     else
         ip_addr = sf::IpAddress{addr};
 
@@ -37,7 +40,7 @@ int main()
     do
     {
         rematch = false; // Avoid endless loop after one rematch.
-        Client client{ip_addr.toString(),port,name,rematch,window};
+        Client client{ip_addr.toString(), port, name, rematch, window};
         client.run();
     } while(rematch); // In case the player wants to immidietly rejoin.
 

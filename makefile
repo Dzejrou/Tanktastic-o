@@ -1,6 +1,6 @@
 # Macros:
 CC = clang++
-CPP = -std=c++11
+CPP = -std=c++11 -g
 GAME = Tanktastic-o
 EXE = run
 EXE_C = ttc_client
