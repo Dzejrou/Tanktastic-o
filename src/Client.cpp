@@ -478,6 +478,7 @@ bool Client::handle_packet(sf::Packet& packet)
             packet >> new_pos;
             packet.clear();
 
+            std::cout << "Check for #" << id << std::endl;
             // Check and update the position if necessary.
             if(plr_[id] != nullptr && plr_[id]->getPosition() != new_pos)
                 plr_[id]->setPosition(new_pos);

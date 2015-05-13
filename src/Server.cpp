@@ -19,7 +19,6 @@ Server::Server(std::string a, int p)
  */
 void Server::run()
 {
-    std::cout << "lol";
     int tmp_id;
     while(running_)
     {
@@ -110,7 +109,8 @@ void Server::run()
             {
                 if(plr_[i] != nullptr)
                 {
-                    packet << PROTOCOL::PLR_NEW_POSITION << plr_[i]->getPosition();
+                    packet << PROTOCOL::PLR_NEW_POSITION
+                        << static_cast<uint32>(i) << plr_[i]->getPosition();
                     send_all(packet, i); // Inform others about the new position.
                     packet.clear();
                 }
