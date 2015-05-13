@@ -14,6 +14,7 @@ struct client; // Forward declaration, see at the bottom.
 
 class Server
 {
+    #define MAX_PLR 4
     using uint32 = sf::Uint32;
     public:
         Server(std::string, int);
@@ -25,15 +26,19 @@ class Server
     private:
         int get_new_id();
         void remove_client(int);
+        void kick(std::unique_ptr<client>&);
         
         sf::SocketSelector                      selector_;
         sf::TcpListener                         listener_;
+        sf::Clock                               disc_clock_, mov_check_clock_;
         std::vector<std::unique_ptr<client>>    clients_;
-        std::unique_ptr<Tank>                   plr_[4];
+        std::unique_ptr<Tank>                   plr_[MAX_PLR];
 
         std::string                             address_;
-        int                                     port_, plr_max_{4};
+        int                                     port_, plr_max_{MAX_PLR};
         bool                                    running_{true};
+        bool                                    not_afk_[MAX_PLR];
+        sf::Time                                time_out_, mov_check_;
 };
 
 struct client

@@ -11,8 +11,8 @@
  */
 Client::Client(std::string a, int p, std::string n, bool& rematch,
                sf::RenderWindow& window)
-    : address_{a}, port_{p}, name_{n},
-      rematch_{rematch}, window_{window}
+    : window_{window}, address_{a}, name_{n}, port_{p},
+      rematch_{rematch}
 {
     /* Connect to the server. */
     socket_.connect(address_,port_);
@@ -461,6 +461,26 @@ bool Client::handle_packet(sf::Packet& packet)
             packet >> name;
             plr_[id]->set_name(name);
             break;
+        }
+        case PROTOCOL::AFK_CHECK:
+        {
+            packet.clear();
+
+            // Send response - reuse the id.
+            packet << PROTOCOL::AFK_RESPONSE << id32;
+            socket_.send(packet);
+            packet.clear();
+            break;
+        }
+        case PROTOCOL::PLR_NEW_POSITION:
+        {
+            sf::Vector2f new_pos;
+            packet >> new_pos;
+            packet.clear();
+
+            // Check and update the position if necessary.
+            if(plr_[id]->getPosition() != new_pos)
+                plr_[id]->setPosition(new_pos);
         }
         default:
             // Should not happen.

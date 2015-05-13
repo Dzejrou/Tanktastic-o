@@ -7,7 +7,8 @@
  * Param: Port which the players will connect to.
  */
 Server::Server(std::string a, int p)
-    : address_{a}, port_{p}
+    : address_{a}, port_{p}, time_out_{sf::seconds(120.f)},
+      mov_check_{sf::seconds(2.f)}
 {
     listener_.listen(port_);
     selector_.add(listener_);
@@ -65,6 +66,41 @@ void Server::run()
                         }
                     }
                 }
+            }
+        }
+
+        // Periodic checks.
+        sf::Packet packet;
+        if(disc_clock_.getElapsedTime() == time_out_)
+        {
+
+            // Urge all to respond and if they don't on the next check,
+            // kick them.
+            for(auto& c : clients_)
+            {
+                if(not_afk_[c->id])
+                {
+                    not_afk_[c->id] = false;
+                    // The id is just a dummy.
+                    packet << PROTOCOL::AFK_CHECK
+                        << static_cast<uint32>(c->id);
+                    c->socket.send(packet);
+                    packet.clear();
+                }
+                else
+                    kick(c);
+            }
+            disc_clock_.restart();
+        }
+
+        if(mov_check_clock_.getElapsedTime() == mov_check_)
+        {
+            // This works as position correction, which accounts to player lag.
+            packet.clear(); // Just to be sure.
+            for(std::size_t i = 0; i < plr_max_; ++i)
+            {
+                packet << PROTOCOL::PLR_NEW_POSITION << plr_[i]->getPosition();
+                send_all(packet, i); // Inform others about the new position.
             }
         }
     }
@@ -134,6 +170,9 @@ void Server::init(client& c)
         c.socket.send(packet);
         packet.clear();
     }
+
+    // Set him to not afk if he just connected.
+    not_afk_[c.id] = true;
 
     /* Send info about this player to the others. */
     packet.clear();
@@ -251,6 +290,13 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             sf::Vector2f pos;
             packet >> pos;
             plr_[id]->setPosition(pos);
+            break;
+        }
+        case PROTOCOL::AFK_RESPONSE:
+        {
+            // This player is still playing.
+            not_afk_[id] = true;
+            break;
         }
         default:
             // Do nothing.
@@ -312,4 +358,23 @@ void Server::remove_client(int id)
         else
             ++it;
     }
+}
+
+/**
+ * Brief: Kicks a client.
+ * Param: Reference to the client getting kicked.
+ */
+void Server::kick(std::unique_ptr<client>& c)
+{
+    // Delete the tank.
+    plr_[c->id].reset(nullptr);
+
+    // Inform others.
+    sf::Packet packet;
+    uint32 tmp = static_cast<uint32>(c->id);
+    packet << PROTOCOL::PLR_QUIT << tmp;
+    send_all(packet, c->id);
+
+    // Delete the client.
+    remove_client(c->id);
 }

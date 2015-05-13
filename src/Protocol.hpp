@@ -21,6 +21,8 @@ enum class PROTOCOL
     PLR_NEW_POSITION, // sf::Uint32 ID, sf::Vector2f POS.
     PROJECTILE_SPAWNED, // sf::Uint32 SHOOTER_ID, sf::Vector2f POS, DIRECTION D.
     DIRECTION_CHANGE, // sf::Uint32 ID, DIRECTION D.
+    AFK_CHECK, // sf::Uint32 ID (DUMMY).
+    AFK_RESPONSE // sf::Uint32 ID.
 };
 
 enum class STATE
