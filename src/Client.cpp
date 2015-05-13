@@ -17,8 +17,6 @@ Client::Client(std::string a, int p, std::string n, bool& rematch,
     /* Connect to the server. */
     socket_.connect(address_,port_);
 
-    std::cout << "Window size = (" << window.getSize().x << ","
-        << window.getSize().y << ")." << std::endl;
     window_.setKeyRepeatEnabled(false); // Do not interpret pressed key for
                                         // multiple presses.
 
@@ -479,7 +477,8 @@ bool Client::handle_packet(sf::Packet& packet)
             packet.clear();
 
             // Check and update the position if necessary.
-            if(plr_[id] != nullptr && plr_[id]->getPosition() != new_pos)
+            if(plr_[id] != nullptr && plr_[id]->getPosition() != new_pos
+            && is_valid(new_pos, id))
                 plr_[id]->setPosition(new_pos);
         }
         default:

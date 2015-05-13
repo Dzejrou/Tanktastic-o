@@ -1,0 +1,5 @@
+/home/dzejrou/Documents/Projects/Tanktastic-o/SFML/src/SFML/Audio/CMakeFiles/sfml-audio.dir
+/home/dzejrou/Documents/Projects/Tanktastic-o/SFML/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir
+/home/dzejrou/Documents/Projects/Tanktastic-o/SFML/src/SFML/Network/CMakeFiles/sfml-network.dir
+/home/dzejrou/Documents/Projects/Tanktastic-o/SFML/src/SFML/System/CMakeFiles/sfml-system.dir
+/home/dzejrou/Documents/Projects/Tanktastic-o/SFML/src/SFML/Window/CMakeFiles/sfml-window.dir

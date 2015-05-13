@@ -1,4 +1,4 @@
 *.o
-SFML/*
+SFML/lib/*
 ttc_server
 ttc_client
