@@ -71,9 +71,9 @@ void Server::run()
 
         // Periodic checks.
         sf::Packet packet;
-        if(disc_clock_.getElapsedTime() == time_out_)
+        if(disc_clock_.getElapsedTime() >= time_out_)
         {
-
+            std::cout << "[Status] AFK CHECK." << std::endl;
             // Urge all to respond and if they don't on the next check,
             // kick them.
             for(auto& c : clients_)
@@ -98,7 +98,7 @@ void Server::run()
             disc_clock_.restart();
         }
 
-        if(mov_check_clock_.getElapsedTime() == mov_check_)
+        if(mov_check_clock_.getElapsedTime() >= mov_check_)
         {
             // This works as position correction, which accounts to player lag.
             packet.clear(); // Just to be sure.
@@ -106,7 +106,9 @@ void Server::run()
             {
                 packet << PROTOCOL::PLR_NEW_POSITION << plr_[i]->getPosition();
                 send_all(packet, i); // Inform others about the new position.
+                packet.clear();
             }
+            mov_check_clock_.restart();
         }
     }
 }
