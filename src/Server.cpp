@@ -19,6 +19,7 @@ Server::Server(std::string a, int p)
  */
 void Server::run()
 {
+    std::cout << "lol";
     int tmp_id;
     while(running_)
     {

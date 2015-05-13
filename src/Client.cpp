@@ -479,7 +479,7 @@ bool Client::handle_packet(sf::Packet& packet)
             packet.clear();
 
             // Check and update the position if necessary.
-            if(plr_[id]->getPosition() != new_pos)
+            if(plr_[id] != nullptr && plr_[id]->getPosition() != new_pos)
                 plr_[id]->setPosition(new_pos);
         }
         default:
