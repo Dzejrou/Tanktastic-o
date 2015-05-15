@@ -96,6 +96,7 @@ void Client::run()
     sf::Event event;
     while(window_.isOpen() && running_)
     {
+        // Do this on every iteration, do not limit to FPS.
         if(socket_.receive(packet) == sf::Socket::Done)
         { // Handle info sent from the server.
             handle_packet(packet);
@@ -104,8 +105,16 @@ void Client::run()
 
         elapsed_time = clock_.restart();
         last_time_ += elapsed_time;
-        if(last_time_ >= frame_time_) // 60 FPS.
+        while(last_time_ >= frame_time_) // 60 FPS.
         {
+            // Main while loop blocked on higher fps, thus need to
+            // do this again.
+            if(socket_.receive(packet) == sf::Socket::Done)
+            { // Handle info sent from the server.
+                handle_packet(packet);
+                packet.clear();
+            }
+
             last_time_ -= frame_time_;
             if(window_.pollEvent(event) && state_ != STATE::PAUSED)
             { // Handle player input when game isn't paused. 
@@ -255,9 +264,7 @@ DIRECTION::dir Client::key_to_dir(sf::Keyboard::Key key)
         case sf::Keyboard::D:
             return DIRECTION::RIGHT;
         default:
-            std::cout << "[Error] Returning NO_DIR from key_to_dir."
-                << std::endl;
-            return DIRECTION::NO_DIR; // Should not happend.
+            return DIRECTION::NO_DIR; // Key combination.
     }
 }
 
