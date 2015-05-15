@@ -358,7 +358,7 @@ void Client::update()
             ++it;
     }
 
-    if(plr_[id_] != nullptr)
+    if(plr_[id_] != nullptr && plr_[id_]->is_moving())
         move(id_);
     /*for(int i = 0; i < plr_max_; ++i)
     {
