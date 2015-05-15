@@ -8,7 +8,7 @@
  */
 Server::Server(std::string a, int p)
     : address_{a}, port_{p}, time_out_{sf::seconds(60.f)},
-      mov_check_{sf::seconds(1.f/10.f)}
+      mov_check_{sf::seconds(1.f/60.f)}
 {
     listener_.listen(port_);
     selector_.add(listener_);
@@ -42,7 +42,7 @@ void Server::run()
                         clients_.push_back(std::move(tmp_client));
 
                         init(*(clients_.back()));
-                        std::cout << "Player with id=" << tmp_id
+                        std::cout << "[Status] Player #" << tmp_id
                             << " has joined the game." << std::endl;
                         tmp_id = -1;
                     }
