@@ -276,7 +276,7 @@ void Client::move(int id)
 {
     sf::Vector2f new_position, delta_position;
     DIRECTION::dir dir = plr_[id]->get_dir();
-    float speed = 5.f;
+    float speed = 3.f;
     switch(dir)
     {
         case DIRECTION::UP:
