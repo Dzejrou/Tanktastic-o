@@ -8,7 +8,7 @@
  */
 Server::Server(std::string a, int p)
     : address_{a}, port_{p}, time_out_{sf::seconds(60.f)},
-      mov_check_{sf::seconds(1.f/60.f)}
+      mov_check_{sf::seconds(1.f)}///60.f)}
 {
     listener_.listen(port_);
     selector_.add(listener_);
