@@ -76,28 +76,30 @@ void Server::run()
         if(disc_clock_.getElapsedTime() >= time_out_)
         {
             std::cout << "[Status] AFK CHECK." << std::endl;
-            // Urge all to respond and if they don't on the next check,
-            // kick them.
+            // Kick those who haven't responded since last time.
+            for(auto& c : clients_)
+            { // Two checks are necessary if the kicking would take too
+              // long so that the answer of some clients would get ignored.
+                if(c != nullptr && !not_afk_[c->id])
+                {
+                    std::cout << "[Status] Kicking client #" << c->id
+                        << std::endl;
+                    kick(c);
+                    remove_client(c->id);
+                }
+            }
+
+            // Urge all to respond to the check.
             for(auto& c : clients_)
             {
-                if(c != nullptr)
+                if(c != nullptr && not_afk_[c->id])
                 {
-                    if(not_afk_[c->id])
-                    {
-                        not_afk_[c->id] = false;
-                        // The id is just a dummy.
-                        packet << PROTOCOL::AFK_CHECK
-                            << static_cast<uint32>(c->id);
-                        c->socket.send(packet);
-                        packet.clear();
-                    }
-                    else
-                    {
-                        std::cout << "[Status] Kicking client #" << c->id
-                            << std::endl;
-                        kick(c);
-                        remove_client(c->id);
-                    }
+                    not_afk_[c->id] = false;
+                    // The id is just a dummy.
+                    packet << PROTOCOL::AFK_CHECK
+                        << static_cast<uint32>(c->id);
+                    c->socket.send(packet);
+                    packet.clear();
                 }
             }
             disc_clock_.restart();
@@ -318,7 +320,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             // This player is still playing.
             not_afk_[id] = true;
             std::cout << "[Status] Player #" << id <<
-                "is not afk." << std::endl;
+                " is not afk." << std::endl;
             break;
         }
         default:
