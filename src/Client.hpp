@@ -13,7 +13,7 @@
 
 class Client
 {
-    #define PLR_MAX 4
+    #define MAX_PLR 4
     using uint32 = sf::Uint32;
     public:
         Client(std::string, int, std::string, bool&, sf::RenderWindow&);
@@ -28,7 +28,7 @@ class Client
         bool is_valid(sf::Vector2f, int);
         DIRECTION::dir key_to_dir(sf::Keyboard::Key);
 
-        const int                   plr_max_{PLR_MAX};
+        const int                   plr_max_{MAX_PLR};
 
         sf::RenderWindow&           window_;
         sf::TcpSocket               socket_;
@@ -36,7 +36,7 @@ class Client
         sf::Time                    frame_time_{sf::seconds(1/60.f)};
         sf::Time                    last_time_{sf::seconds(0.f)};
         sf::Time                    cd_time{sf::seconds(1.f)};
-        std::unique_ptr<Tank>       plr_[PLR_MAX];
+        std::unique_ptr<Tank>       plr_[MAX_PLR];
         std::vector<Projectile>     shots_;
         STATE                       state_{STATE::PLAYING};
         sf::Text                    lost_, press_, game_name_;

@@ -6,7 +6,6 @@
  * #Brief this is the enum class used for the communication protocol
  *  used in Tanktastic-o project. Expected arguments in the packet are
  *  written in the comment after the enum constant.
- * #Author Dzejrou
  */
 enum class PROTOCOL
 {

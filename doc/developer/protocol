@@ -1,0 +1,80 @@
+Protocol
+========
+
+Info
+====
+    The Protocol.hpp and Protocol.cpp files include the game's communication
+    protocol and some necessary stream overloads used to transfer data
+    of specific type.
+
+Packets
+=======
+    Every packet sent in the game has to start with one of the head messages
+    specified below followed by it's arguments.
+
+Messages (for data types see Protocol.hpp)
+==========================================
+    MESSAGE: Indicates that the data sent are a raw string message.
+    Note: Not in use currently.
+    ARGS: String containing the message.
+
+    START: Initializing message sent by the server to the client when he
+           connects.
+    ARGS: ID of the player, position of the player's tank.
+
+    PLR_DESTROYED: Indicates that a player has been killed.
+    ARGS: ID of the killed player, ID of the player that killed him.
+
+    PLR_SPAWNED: Indicates that a new player has connected to the game.
+    NOTE: Also used to inform a newly connected player of all his already
+          playing opponents.
+    ARGS: ID of the player, position of the player's tank, name of the
+          player, score of the player, boolean value indicating if the
+          player is currently moving.
+
+    PLR_QUIT: Indicates that a player has quit the game.
+    ARGS: ID of the player.
+
+    PLR_NAME: Indicates that a player has been chosen/changed for a player.
+    ARGS: ID of the player, name of the player.
+
+    PLR_MOVEMENT_CHANGE: Indicates that the player has changed his movement
+                         state, that is, either stopped or started moving.
+    ARGS: ID of the player, boolean indicating the change (true = started
+          moving).
+
+    PLR_NEW_POSITION: Indicates that a player had his position changed,
+                      used in movement correction and informing the server
+                      about the player's movement.
+    ARGS: ID of the player, new position of the player.
+
+    PROJECTILE_SPAWNED: Indicates that a projectile was shot by a player.
+    ARGS: ID of the shooting player, position of the projectile, direction
+          in which the projectile was shot.
+
+    DIRECTION_CHANGE: Indicates that a player has changed his direction.
+    ARGS: ID of the player, new direction.
+
+    AFK_CHECK: Used for server's periodic afk checks.
+    ARGS: ID of the player being checked, used as a dummy.
+
+    AFK_RESPONCE: Indicates that a player is active.
+    Note: Since this is used as a responce to AFK_CHECK, the ID can be reused.
+    ARGS: ID of the player.
+
+STATE
+=====
+    Enum used to indicate the game's current state, which controls the
+    process/update methods used.
+
+DIRECTION::dir
+==============
+    Enum used to describe a direction of a tank or projectile.
+    Note: C enum used instead of an enum class due to the fact that this
+          enum is often (if not everytime) converted to an integer value.
+          To supply enum class-like behaviour, it has been added to it's
+          own namespace DIRECTION.
+
+API Reference
+=============
+    Not included because the only methods are stream overloads.

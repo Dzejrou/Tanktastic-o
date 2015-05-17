@@ -1,0 +1,84 @@
+Tank
+====
+
+Info
+====
+    The Tank class represents a tank in the game, controlled by a player.
+
+Parents
+=======
+    sf::Drawable: Allows the tank to be rendered by a sf::RenderTarget object.
+    sf::Transformable: Allow the player to change the tank's position/rotation
+                       etc and apply those changes to the drawn sprite.
+
+API Reference
+=============
+    Tank(int, int)
+    Info: Constructor.
+    ARGS: ID of the player, integer representation of the starting direction.
+
+    PRIVATE draw(sf::RenderTarget&, sf::RenderStates)
+    Info: Draws the tank sprite to a RenderTarget.
+    ARGS: Reference to the called of this method, RenderStates containing
+          the position/rotation/scale etc that is to be altered by
+          the getTransform() method inherited from sf::Transformable.
+
+    set_dir(DIRECTION::dir)
+    Info: Changes the direction of the tank.
+    ARGS: The new direction.
+
+    add_point()
+    Info: Adds a score point to the tank's score (number of enemies killed).
+    ARGS: None.
+
+    set_name(std::string)
+    Info: Set's the name corresponding to the tank's player which is then
+          draws with the tank.
+    ARGS: String representing the new name.
+
+    set_moving(bool)
+    Info: Changes the movement state of the tank.
+    ARGS: True for movement start, false for movement end.
+
+    get_bounds()
+    Info: Returns the tank's bounding box (i.e. it's hitbox), which is used
+          for collision detection.
+    ARGS: None.
+
+    get_id()
+    Info: Returns the ID of the player controlling this tank.
+    ARGS: None.
+
+    get_score()
+    Info: Returns the score of the player controlling this tank.
+    ARGS: None.
+
+    get_name()
+    Info: Returns the name of the player controlling this tank.
+    ARGS: None.
+
+    is_moving()
+    Info: Returns true if the tank is moving, false otherwise.
+    ARGS: None.
+
+    get_name()
+    Info: Returns the name of the player controlling this tank.
+    ARGS: None.
+
+    get_dir()
+    Info: Returns the direction this tank is moving in.
+    ARGS: None.
+
+Class member variables
+======================
+    id_:         ID of the player controlling this tank.
+    score_:      Score of the player controlling this tank.
+    moving_:     Boolean value indicating if the tank is moving.
+    name_:       Name of the player controlling this tank.
+    font_:       Font used to draw the name and score to the screen.
+    name_text_:  Text containing the name of the player.
+    score_text_: Text containing the score of the player.
+    spr_:        Array of sprites - one for each direction.
+    tex_:        Array of textures - one for each direction.
+    col_:        Array of colors - one for each player ID.
+    dir_:        The current direction of the tank.

@@ -1,0 +1,44 @@
+Projectile
+==========
+
+Info
+====
+    Class representing a projectile that can be shot by a player's tank.
+
+Parents
+=======
+    sf::Drawable: Allows for this class to be drawn by a sf::RenderTarget
+                  object.
+    sf::Transformable: Allows for position/rotation/etc change.
+
+API Reference
+=============
+    Projectile(int, sf::Vector2f, DIRECTION::dir)
+    Info: Constructor.
+    ARGS: ID of the shooter, starting position of the projectile,
+          direction of the projectile's movement.
+
+    update()
+    Info: Moves the projectile on every call.
+    ARGS: None.
+
+    get_bounds()
+    Info: Returns a rectangle representing the bounds of this projectile
+          (i.e. it's hitbox) used for collision checking.
+    ARGS: None.
+
+    PRIVATE draw(sf::RenderTarget&, sf::RenderStates)
+    Info: Draws the projectile.
+    ARGS: Reference to the RenderTarget calling this method, RenderStates
+          containing the position/rotation/scale/etc that can be change
+          by the getTransform() method inherited from sf::Transformable.
+
+    get_id()
+    Info: Returns the ID of the shooter.
+    Args: None.
+
+Class member variables
+======================
+    dir_:  Direction in which this projectile was shot.
+    ball_: Shape representing this projectile.
+    id_:   ID of the shooter.
