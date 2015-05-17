@@ -58,7 +58,7 @@ void Server::run()
                 for(const auto& client : clients_)
                 {
                     if(client == nullptr)
-                        std::cout << "got a null client" << std::endl;
+                        std::cout << "[Error] Got a null client" << std::endl;
                     else if(selector_.isReady(client->socket))
                     {
                         sf::Packet packet;
@@ -317,6 +317,8 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
         {
             // This player is still playing.
             not_afk_[id] = true;
+            std::cout << "[Status] Player #" << id <<
+                "is not afk." << std::endl;
             break;
         }
         default:
