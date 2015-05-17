@@ -18,7 +18,7 @@
  */
 class Client
 {
-    #define MAX_PLR 6
+    #define MAX_PLR 4
     using uint32 = sf::Uint32;
     public:
         Client(std::string, int, std::string, bool&, sf::RenderWindow&);

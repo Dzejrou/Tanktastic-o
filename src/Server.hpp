@@ -18,7 +18,7 @@ struct client; // Forward declaration, see at the bottom.
  */
 class Server
 {
-    #define MAX_PLR 6
+    #define MAX_PLR 4
     using uint32 = sf::Uint32;
     public:
         Server(std::string, int);
