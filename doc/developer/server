@@ -24,8 +24,7 @@ API Reference
           there are, adds them to the game if the player limit isn't reached.
           If there are no new clients to handle, it handles any packets that
           it recieved form the connected clients.
-          After all that, it performs (if possible) the time out check
-          and move correction.
+          After all that, it performs (if possible) move correction.
     ARGS: None.
 
     init(client&)
@@ -70,7 +69,6 @@ Class member variables
     selector_:        Socket selector used as a manager for the listener
                       and sockets.
     listener_:        TCP listener the server uses for communication.
-    dics_clock_:      Clock that measures the time until next afk check.
     mov_check_clock_: Clock that measures the time until next movement
                       correction.
     clients_:         Vector of pointers to the clients.
@@ -79,7 +77,4 @@ Class member variables
     port_:            Port that the server listens on.
     plr_max_:         Maximal number of connected players.
     running_:         Boolean variable indicating if the server is running.
-    not_afk_:         Array of booleans indicating if a given player
-                      is marked afk.
-    time_out_:        Time between afk checks.
     mov_check_:       Time between movement corrections.

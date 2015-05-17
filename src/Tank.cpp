@@ -7,9 +7,21 @@
  * Param: Score of the player associated with the tank.
  */
 Tank::Tank(int id, int s)
-    : id_{id}, dir_{static_cast<DIRECTION::dir>(id)}, score_{s}
+    : id_{id}, score_{s}
 {
+    /**
+     * Note: If the player limit is higher than 4, the fifth player and
+     *       all after him will start with tank designed as #3, because
+     *       there are no resources for ID 5 and higher.
+     */
     int tmp_id = id_; // For resource loading.
+    if(id_ <= 3) // Only 4 directions.
+        dir_ = static_cast<DIRECTION::dir>(id_);
+    else
+    {
+        id_ = 3;
+        dir_ = DIRECTION::UP;
+    }
 
     /* Set the colors for each player id. */
     col_[0] = sf::Color::Red;
@@ -18,9 +30,6 @@ Tank::Tank(int id, int s)
     col_[3] = sf::Color::Yellow;
 
     /* Load textures for all directions. */
-    // Note: No resources for id >= 4, will use 3.
-    if(id_ >= 4)
-        id_ = 3;
     std::string id_s = std::to_string(id_);
     tex_[DIRECTION::UP].loadFromFile("Resources/up" + id_s + ".png");
     tex_[DIRECTION::DOWN].loadFromFile("Resources/down" + id_s + ".png");

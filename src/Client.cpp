@@ -448,14 +448,16 @@ bool Client::handle_packet(sf::Packet& packet)
         {
             bool mov;
             packet >> mov;
-            plr_[id]->set_moving(mov);
+            if(id < plr_max_)
+                plr_[id]->set_moving(mov);
             break;
         }
         case PROTOCOL::DIRECTION_CHANGE:
         {
             DIRECTION::dir dir;
             packet >> dir;
-            plr_[id]->set_dir(dir);   
+            if(id < plr_max_)
+                plr_[id]->set_dir(dir);   
             break;
         }
         case PROTOCOL::PROJECTILE_SPAWNED:
@@ -472,20 +474,24 @@ bool Client::handle_packet(sf::Packet& packet)
             uint32 id_killer32;
             packet >> id_killer32;
             int id_killer = static_cast<int>(id_killer32);
-            plr_[id].reset(nullptr);
-            plr_[id_killer]->add_point();
+            if(id < plr_max_)
+                plr_[id].reset(nullptr);
+            if(id_killer < plr_max_)
+                plr_[id_killer]->add_point();
             break;
         }
         case PROTOCOL::PLR_QUIT:
             std::cout << "[Status] Player #" << id <<
                 " has left the game." << std::endl;
-            plr_[id].reset(nullptr); // Everything else is done by server.
+            if(id < plr_max_)
+                plr_[id].reset(nullptr); // Everything else is done by server.
             break;
         case PROTOCOL::PLR_NAME:
         {
             std::string name;
             packet >> name;
-            plr_[id]->set_name(name);
+            if(id < plr_max_)
+                plr_[id]->set_name(name);
             break;
         }
         case PROTOCOL::PLR_NEW_POSITION:

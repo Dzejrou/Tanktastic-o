@@ -119,7 +119,7 @@ void Server::init(client& c)
             break;
         default: // Spawn others in the middle.
             vec.x = 400.f;
-            vec.y = 350.f;
+            vec.y = 350.f - c.id * 10;
             break;
     }
     plr_[c.id].reset(new Tank(c.id, 0));
