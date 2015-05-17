@@ -9,6 +9,8 @@
 Tank::Tank(int id, int s)
     : id_{id}, dir_{static_cast<DIRECTION::dir>(id)}, score_{s}
 {
+    int tmp_id = id_; // For resource loading.
+
     /* Set the colors for each player id. */
     col_[0] = sf::Color::Red;
     col_[1] = sf::Color::Blue;
@@ -16,11 +18,10 @@ Tank::Tank(int id, int s)
     col_[3] = sf::Color::Yellow;
 
     /* Load textures for all directions. */
-    std::string id_s;
-    if(id_ < 4)
-        id_s = std::to_string(id_);
-    else
-        id_s = std::to_string(3);
+    // Note: No resources for id >= 4, will use 3.
+    if(id_ >= 4)
+        id = 3;
+    std::string id_s = std::to_string(id_);
     tex_[DIRECTION::UP].loadFromFile("Resources/up" + id_s + ".png");
     tex_[DIRECTION::DOWN].loadFromFile("Resources/down" + id_s + ".png");
     tex_[DIRECTION::LEFT].loadFromFile("Resources/left" + id_s + ".png");
@@ -44,6 +45,9 @@ Tank::Tank(int id, int s)
     /* Associate textures with sprites. */
     for(int i = 0; i < 4; ++i) // Associate textures with sprites.
         spr_[i].setTexture(tex_[i]);
+
+    if(tmp_id >= 4)
+        id_ = tmp_id; // Restore it.
 }
 
 /**
