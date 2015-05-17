@@ -1,0 +1,85 @@
+Server
+======
+
+Info
+====
+    Class representing the server in this game, accepts new connections, checks
+    for time outs and provides a "middle man" for communication between
+    clients. Also provides movement correction for users suffering from
+    connectivity issues such as high ping/lag.
+
+Client struct
+=============
+    Simple structure used to bundle a socket with it's ID together.
+
+API Reference
+=============
+    Server(std::string, int)
+    Info: Constructor, starts listening at the given address at the given
+          port.
+    ARGS: Address represented by a string, listening port.
+
+    run()
+    Info: Main server loop, checks if there are any new connections and if
+          there are, adds them to the game if the player limit isn't reached.
+          If there are no new clients to handle, it handles any packets that
+          it recieved form the connected clients.
+          After all that, it performs (if possible) the time out check
+          and move correction.
+    ARGS: None.
+
+    init(client&)
+    Info: Perform the initialization of a client by sending him all needed
+          information. After that, informs all other already playing clients
+          about the new client.
+    ARGS: Reference to the new client.
+
+    handle_client(sf::Packet&, sf::TcpSocket&)
+    Info: Handles a single packet from the client.
+    ARGS: Reference to the recieved packet and reference to the socket it
+          came from, used to send a response.
+
+    send_all(sf::Packet&, int)
+    Info: Sends a message to all clients except one (the sender), if there is
+          no sender (server message), simply use any negative number since
+          those will never be used as IDs.
+    ARGS: Reference to the packet to be sent, ID of the client that is
+          excluded from this mass send.
+
+    PRIVATE get_new_id()
+    Info: Returns a new ID for a newly connected player or -1 if the server
+          is full (that is, all IDs are in use).
+    ARGS: None.
+    
+    PRIVATE remove_client(int)
+    Info: Removes client with the given ID from the server.
+    ARGS: ID of the client that is to be removed.
+
+    PRIVATE kick(std::unique_ptr<client>&)
+    Info: Kicks a player from the game by deleting his tank and informing
+          others, but does *not* remove the client (for the possibility of
+          his future use).
+    ARGS: Reference to the unique pointer to the client being kicked.
+
+    ~Server()
+    Info: Destructor, closes the listener.
+    ARGS: None.
+
+Class member variables
+======================
+    selector_:        Socket selector used as a manager for the listener
+                      and sockets.
+    listener_:        TCP listener the server uses for communication.
+    dics_clock_:      Clock that measures the time until next afk check.
+    mov_check_clock_: Clock that measures the time until next movement
+                      correction.
+    clients_:         Vector of pointers to the clients.
+    plr_:             Vector of pointers to the tank objects.
+    address_:         Address of this server.
+    port_:            Port that the server listens on.
+    plr_max_:         Maximal number of connected players.
+    running_:         Boolean variable indicating if the server is running.
+    not_afk_:         Array of booleans indicating if a given player
+                      is marked afk.
+    time_out_:        Time between afk checks.
+    mov_check_:       Time between movement corrections.

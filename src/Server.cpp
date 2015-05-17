@@ -185,7 +185,7 @@ void Server::init(client& c)
         packet.clear();
     }
 
-    // Set him to not afk if he just connected.
+    /* Set him to not afk if he just connected. */
     not_afk_[c.id] = true;
 
     /* Send info about this player to the others. */
@@ -203,6 +203,10 @@ void Server::init(client& c)
  */
 void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
 {
+    /**
+     * For information about the protocol heads, see the file Protocol.hpp
+     * or the protocol documentation.
+     */
     PROTOCOL head;
     uint32 id32;
     packet >> head >> id32;

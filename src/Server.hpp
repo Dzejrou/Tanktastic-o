@@ -12,6 +12,10 @@
 
 struct client; // Forward declaration, see at the bottom.
 
+/**
+ * Class representing the server in this game, controls the communication
+ * between clients, provides time out checks and movement correction.
+ */
 class Server
 {
     #define MAX_PLR 4

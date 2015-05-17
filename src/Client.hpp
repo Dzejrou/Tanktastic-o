@@ -11,6 +11,11 @@
 #include "Tank.hpp"
 #include "Projectile.hpp"
 
+/**
+ * Class representing a client connected to the game, it is responsible
+ * for connection, user input handling, packet communication handling,
+ * updating the game and rendering.
+ */
 class Client
 {
     #define MAX_PLR 4
