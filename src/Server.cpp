@@ -26,6 +26,8 @@ void Server::run()
         {                                         // with timeout of one frame.
             if(selector_.isReady(listener_)) // Check for a pending connection.
             {
+                std::cout << "[Status] A player is trying to connect."
+                    << std::endl;
                 std::unique_ptr<client> tmp_client{new client};
                 if(listener_.accept(tmp_client->socket) == sf::Socket::Done)
                 {

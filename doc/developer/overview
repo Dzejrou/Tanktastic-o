@@ -1,0 +1,12 @@
+Tanktastic-o developer's documentation
+======================================
+    Tanktastic-o is a 2D multiplayer game where the players control tanks and
+    try to destroy each other.
+    The communication between clients is done through a custom binary
+    protocol (see protocol documentation) with the server acting as a middle
+    man.
+
+Technology
+==========
+    The game is created using C++ and the SFML library (sfml-dev.org) which
+    is used for gaphics rendering and network communication.
