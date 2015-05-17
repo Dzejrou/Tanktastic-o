@@ -20,7 +20,7 @@ Tank::Tank(int id, int s)
     /* Load textures for all directions. */
     // Note: No resources for id >= 4, will use 3.
     if(id_ >= 4)
-        id = 3;
+        id_ = 3;
     std::string id_s = std::to_string(id_);
     tex_[DIRECTION::UP].loadFromFile("Resources/up" + id_s + ".png");
     tex_[DIRECTION::DOWN].loadFromFile("Resources/down" + id_s + ".png");
