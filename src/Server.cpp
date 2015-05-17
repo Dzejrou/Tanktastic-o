@@ -146,9 +146,10 @@ void Server::init(client& c)
             vec.x = 50.f;
             vec.y = 500.f;
             break;
-        default:
-            std::cout << "[Error] Invalid player ID: " << c.id
-                << std::endl;
+        default: // Spawn others in the middle.
+            vec.x = 400.f;
+            vec.y = 350.f;
+            break;
     }
     plr_[c.id].reset(new Tank(c.id, 0));
     plr_[c.id]->setPosition(vec);
