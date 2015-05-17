@@ -7,9 +7,9 @@ int main()
     std::string addr;
     int port;
     
-    std::cout << "Address: ";
+    std::cout << "[Init] Address: ";
     std::cin >> addr;
-    std::cout << "Port: ";
+    std::cout << "[Init] Port: ";
     std::cin >> port;
 
     sf::IpAddress ip_addr;
@@ -26,7 +26,7 @@ int main()
         ip_addr = sf::IpAddress{addr};
 
     std::string name;
-    std::cout << "Name (seven characters maximum): ";
+    std::cout << "[Init] Name (seven characters maximum): ";
     std::cin >> name;
     if(name.size() > 7)
         name = name.substr(0,7);

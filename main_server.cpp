@@ -6,9 +6,9 @@ int main()
     std::string addr;
     int port;
     
-    std::cout << "Address: ";
+    std::cout << "[Init] Address: ";
     std::cin >> addr;
-    std::cout << "Port: ";
+    std::cout << "[Init] Port: ";
     std::cin >> port;
 
     sf::IpAddress ip_addr;
@@ -22,7 +22,7 @@ int main()
     else
         ip_addr = sf::IpAddress{addr};
 
-    std::cout << std::endl << "[Init] Chosen address: "
+    std::cout << "[Init] Chosen address: "
         << ip_addr.toString() << std::endl << "[Init] Chosen port: "
         << port << std::endl;
 

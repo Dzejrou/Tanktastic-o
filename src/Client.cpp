@@ -48,11 +48,9 @@ Client::Client(std::string a, int p, std::string n, bool& rematch,
     game_name_.setPosition(450.f, 615.f);
 
     /* Initial conversation with the server. */
-    std::cout << "gonna connect" << std::endl;
     sf::Packet packet;
     if(socket_.receive(packet) == sf::Socket::Done)
     {
-        std::cout << "connected" << std::endl;
         PROTOCOL head;
         packet >> head;
         if(head == PROTOCOL::START)
@@ -86,7 +84,6 @@ Client::Client(std::string a, int p, std::string n, bool& rematch,
         exit(1);
     }
 
-    std::cout << "lol" << std::endl;
     socket_.setBlocking(false); // Wait ONLY for the initial message.
 }
 
