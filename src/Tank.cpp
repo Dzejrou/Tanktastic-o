@@ -16,7 +16,11 @@ Tank::Tank(int id, int s)
     col_[3] = sf::Color::Yellow;
 
     /* Load textures for all directions. */
-    std::string id_s = std::to_string(id_);
+    std::string id_s;
+    if(id_ < 4)
+        id_s = std::to_string(id_);
+    else
+        id_s = std::to_string(3);
     tex_[DIRECTION::UP].loadFromFile("Resources/up" + id_s + ".png");
     tex_[DIRECTION::DOWN].loadFromFile("Resources/down" + id_s + ".png");
     tex_[DIRECTION::LEFT].loadFromFile("Resources/left" + id_s + ".png");
