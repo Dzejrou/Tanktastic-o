@@ -22,7 +22,7 @@ void Server::run()
     int tmp_id;
     while(running_)
     {
-        if(selector_.wait(sf::seconds(1.f/60.f))) // Waiting for data
+        if(selector_.wait())//sf::seconds(1.f/60.f))) // Waiting for data
         {                                         // with timeout of one frame.
             if(selector_.isReady(listener_)) // Check for a pending connection.
             {
@@ -76,30 +76,28 @@ void Server::run()
         if(disc_clock_.getElapsedTime() >= time_out_)
         {
             std::cout << "[Status] AFK CHECK." << std::endl;
-            // Kick those who haven't responded since last time.
-            for(auto& c : clients_)
-            { // Two checks are necessary if the kicking would take too
-              // long so that the answer of some clients would get ignored.
-                if(c != nullptr && !not_afk_[c->id])
-                {
-                    std::cout << "[Status] Kicking client #" << c->id
-                        << std::endl;
-                    kick(c);
-                    remove_client(c->id);
-                }
-            }
-
-            // Urge all to respond to the check.
+            // Urge all to respond and if they don't on the next check,
+            // kick them.
             for(auto& c : clients_)
             {
-                if(c != nullptr && not_afk_[c->id])
+                if(c != nullptr)
                 {
-                    not_afk_[c->id] = false;
-                    // The id is just a dummy.
-                    packet << PROTOCOL::AFK_CHECK
-                        << static_cast<uint32>(c->id);
-                    c->socket.send(packet);
-                    packet.clear();
+                    if(not_afk_[c->id])
+                    {
+                        not_afk_[c->id] = false;
+                        // The id is just a dummy.
+                        packet << PROTOCOL::AFK_CHECK
+                            << static_cast<uint32>(c->id);
+                        c->socket.send(packet);
+                        packet.clear();
+                    }
+                    else
+                    {
+                        std::cout << "[Status] Kicking client #" << c->id
+                            << std::endl;
+                        kick(c);
+                        remove_client(c->id);
+                    }
                 }
             }
             disc_clock_.restart();
