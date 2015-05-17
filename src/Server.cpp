@@ -22,8 +22,8 @@ void Server::run()
     int tmp_id;
     while(running_)
     {
-        if(selector_.wait())//sf::seconds(1.f/60.f))) // Waiting for data
-        {                                         // with timeout of one frame.
+        if(selector_.wait()) // Waiting for data.
+        {
             if(selector_.isReady(listener_)) // Check for a pending connection.
             {
                 std::cout << "[Status] A player is trying to connect."
@@ -76,22 +76,21 @@ void Server::run()
         if(disc_clock_.getElapsedTime() >= time_out_)
         {
             std::cout << "[Status] AFK CHECK." << std::endl;
-            // Urge all to respond and if they don't on the next check,
-            // kick them.
+            // Urge all clients to respond to the afk check and if they
+            // don't, kick them.
             for(auto& c : clients_)
             {
                 if(c != nullptr)
                 {
-                    if(not_afk_[c->id])
-                    {
-                        not_afk_[c->id] = false;
-                        // The id is just a dummy.
-                        packet << PROTOCOL::AFK_CHECK
-                            << static_cast<uint32>(c->id);
-                        c->socket.send(packet);
-                        packet.clear();
-                    }
-                    else
+                    not_afk_[c->id] = false;
+                    // The id is just a dummy.
+                    packet << PROTOCOL::AFK_CHECK
+                        << static_cast<uint32>(c->id);
+                    c->socket.send(packet);
+                    packet.clear();
+                    if(c->socket.receive(packet) == sf::Socket::Done)
+                        handle_client(packet, c->socket);
+                    if(!not_afk_[c->id])
                     {
                         std::cout << "[Status] Kicking client #" << c->id
                             << std::endl;

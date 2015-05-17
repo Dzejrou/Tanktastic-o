@@ -474,6 +474,8 @@ bool Client::handle_packet(sf::Packet& packet)
             break;
         }
         case PROTOCOL::PLR_QUIT:
+            std::cout << "[Status] Player #" << id <<
+                " has left the game." << std::endl;
             plr_[id].reset(nullptr); // Everything else is done by server.
             break;
         case PROTOCOL::PLR_NAME:
