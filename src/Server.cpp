@@ -119,7 +119,7 @@ void Server::init(client& c)
             break;
         default: // Spawn others in the middle.
             vec.x = 400.f;
-            vec.y = 350.f - c.id * 10;
+            vec.y = (350 + c.id * 50) % 600;
             break;
     }
     plr_[c.id].reset(new Tank(c.id, 0));
@@ -236,8 +236,8 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             packet >> id_killer;
             plr_[id].reset(nullptr); // Get rid of the tank.
             //remove_client(id); // Get rid of the client.
-            std::cout << "Player with id=" << id
-                << " was killed by player with id="
+            std::cout << "[Status] Player #" << id
+                << " was killed by player #"
                 << static_cast<int>(id_killer)
                 << std::endl;
 
@@ -250,7 +250,7 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             break;
         }
         case PROTOCOL::PLR_QUIT:
-        { // TODO: Time-out.
+        {
             plr_[id].reset(nullptr); // Get rid of the tank.
             
             // Get rid of the client.

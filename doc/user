@@ -1,0 +1,51 @@
+Tanktastic-o user's manual
+==========================
+
+Info
+====
+    Tanktastic-o is a 2D multiplayer game of tanks, where the players try
+    to achieve the highest score possible by killing their enemies and
+    surviving at the same time (death cancels their score).
+
+Installation
+============
+    For the simplicity of the installation, an install script was included and
+    can be used by simply typing "./install.sh" in the main directory.
+    This script will generate the makefiles for the SFML library, compile
+    the library and then compile the game.
+
+Controls
+========
+    W -     Movement up.
+    S -     Movement down.
+    A -     Movement left.
+    D -     Movement right.
+    Space - Shoot.
+
+Requirements
+============
+    g++ compiler (for SFML)
+    clang++ compiler (for the game, can be easily changed in the makefile, by
+                      changing the variable CC to g++)
+
+Running a server
+================
+    The server can be run by typing the command "./run -s" in the main
+    directory, the user will be then prompted to enter the IP address and the
+    port that the server will listen on. For simplicity, you can use "public"
+    for the machines public address, "local" for the machines local address,
+    "lh" or "localhost" for 127.0.0.1 (for testing).
+    After you select the address and port, the server starts running and can be
+    stopped by SIGINT (Ctr-c), closing the terminal window or shutting down
+    the machine it's running on.
+
+Starting up the client
+======================
+    The client can be started by typing the command "./run -c" in the main
+    directory, this will prompt the user to enter an address and a port
+    where the server is located and listening, then the player's name.
+    Note: The address and the port will be provided by the server once it
+    is started, so either copy them or ask the server maintainer for
+    the connection information.
+    Note: If one of the clients is on a same machine as the server, simply
+    using "public" will suffice. (or localhost for testing)

@@ -22,8 +22,8 @@ int main()
     else
         ip_addr = sf::IpAddress{addr};
 
-    std::cout << std::endl << "Chosen address: "
-        << ip_addr.toString() << std::endl << "Chosen port: "
+    std::cout << std::endl << "[Init] Chosen address: "
+        << ip_addr.toString() << std::endl << "[Init] Chosen port: "
         << port << std::endl;
 
     Server server{ip_addr.toString(),port};

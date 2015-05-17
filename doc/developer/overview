@@ -5,8 +5,52 @@ Tanktastic-o developer's documentation
     The communication between clients is done through a custom binary
     protocol (see protocol documentation) with the server acting as a middle
     man.
+    The game can be normally played by up to 4 players, but higher number
+    of players can be achieved by changing the MAX_PLR macro in the files
+    Client.hpp and Server.hpp (note: there are only 4 sprites!).
 
 Technology
 ==========
     The game is created using C++ and the SFML library (sfml-dev.org) which
     is used for gaphics rendering and network communication.
+    The target platform is Linux, but porting the game to Windows or OS X
+    should require minimal effort.
+
+Game
+====
+    The game's logic is done on the client side, every client, in his game
+    loop, processes the player's input, handles packets from server, updates
+    its tank and other player's tanks and renders everything to the game
+    window. To protect the players from lag and slower hardware, the server
+    periodically does a movement correction, in which it's sends all the
+    player positions to the players, which might on slower machines or
+    connections result in a small amount of stuttering, but will ensure
+    that the data are synchronized across the players and the server isn't
+    under too much pressure.
+    Any messages sent by the players are filtered by the server, which updates
+    the positions to be later sent/disconnects the player/etc and then
+    resends them to all other players.
+
+About this documentation
+========================
+    Except for this file, there are documentation files for each of the
+    classes. In these files, you will find basic information about the class,
+    it's API reference (methods with parameter types, parameter description and
+    it's purpose) and the list of all class member variables.
+    Installation steps can be found in the "user" file in the parent directory.
+    Aside from these files, most of the task performed by any of these classes
+    is documented by the abundant comments spread across them.
+
+Author
+======
+    Jaroslav Jindrak, @Dzejrou
+    github.com/Dzejrou/Tanktastic-o
+    This game was created as a semestral project for the course NPRG041
+    Programming in C++ at the Faculty of Mathematics and Physics at
+    the Charles University in Pragie, Czech Republic.
+
+SFML
+====
+    SFML was created by Laurent Gomilla and can be found at sfml-dev.org,
+    where you can also find it's documentation.
+    The game was created with the use of SFML version 2.2.
