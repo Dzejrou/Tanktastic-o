@@ -436,9 +436,12 @@ bool Client::handle_packet(sf::Packet& packet)
             bool mov;
             packet >> pos >> score32 >> mov;
             int score = static_cast<int>(score32);
-            plr_[id].reset(new Tank(id, score));
-            plr_[id]->setPosition(pos);
-            plr_[id]->set_moving(mov);
+            if(id < plr_max_)
+            {
+                plr_[id].reset(new Tank(id, score));
+                plr_[id]->setPosition(pos);
+                plr_[id]->set_moving(mov);
+            }
             break;
         }
         case PROTOCOL::PLR_MOVEMENT_CHANGE:
