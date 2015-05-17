@@ -47,6 +47,7 @@ Client::Client(std::string a, int p, std::string n, bool& rematch,
     game_name_.setColor(sf::Color::White);
     game_name_.setPosition(450.f, 615.f);
 
+    /* Initial conversation with the server. */
     sf::Packet packet;
     if(socket_.receive(packet) == sf::Socket::Done)
     {
@@ -209,7 +210,7 @@ void Client::process(sf::Event event)
                         }
                         break;
                     case sf::Keyboard::Space:
-                        if(shoot_cd.getElapsedTime() > cd_time)
+                        if(shoot_cd_.getElapsedTime() > cd_time_)
                         { // Create a new projectile.
                             shots_.push_back(Projectile{id_,
                                     plr_[id_]->getPosition(),
@@ -222,7 +223,7 @@ void Client::process(sf::Event event)
                                 << plr_[id_]->getPosition()
                                 << plr_[id_]->get_dir();
                             socket_.send(packet);
-                            shoot_cd.restart();
+                            shoot_cd_.restart();
                         }
                         break;
                     default:
@@ -379,24 +380,32 @@ void Client::update()
  */
 void Client::render()
 {
+    // Background.
     window_.clear(sf::Color::White);
 
+    // Botom info rectangle.
     window_.draw(back_);
     window_.draw(game_name_);
+
+    // Players.
     for(int i = 0; i < plr_max_; ++i)
     {
         if(plr_[i] != nullptr)
             window_.draw(*plr_[i]);
     }
 
+    // Death text.
     if(state_ == STATE::ENDED)
     {
         window_.draw(lost_);
         window_.draw(press_);
     }
 
+    // Projectiles.
     for(auto& shot : shots_)
         window_.draw(shot);
+
+    // Draws it all to the window.
     window_.display();
 }
 
@@ -406,6 +415,10 @@ void Client::render()
  */
 bool Client::handle_packet(sf::Packet& packet)
 {
+    /**
+     * For information about the protocol heads see the file
+     * Protocol.hpp or the documentation for it.
+     */
     PROTOCOL    head;
     uint32      id32;
     int         id;
@@ -458,7 +471,7 @@ bool Client::handle_packet(sf::Packet& packet)
             break;
         }
         case PROTOCOL::PLR_QUIT:
-            plr_[id].reset(nullptr);
+            plr_[id].reset(nullptr); // Everything else is done by server.
             break;
         case PROTOCOL::PLR_NAME:
         {

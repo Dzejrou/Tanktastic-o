@@ -3,4 +3,101 @@ Client
 
 Info
 ====
-    Class representing the client conntected to the server.
+    Class representing the client conntected to the server. Connects to the
+    server upon construction and closes the connection upon destruction.
+    Handles movement input, updating of the tank objects and rendering to the
+    game's window.
+    Tank position updates are done on the client side, with info packets
+    being sent to the server after very move (which also checks for possible
+    collisions with other players).
+
+API Reference
+=============
+    Client(std::string, int, std::string, bool&, sf::RenderWindow&)
+    Info: Constructor, connects to the server, loads all resources like fonts
+          and textures. Before it finnished constructing it performs the
+          initial conversation with the server about the assigned player ID
+          and starting position.
+    ARGS: The address of the server (as a string), the port number, name of
+          the player, reference to the rematch boolean variable indicating if
+          the player want's to rejoin the server when he dies and reference
+          to the game's window for rendering purposes.
+
+    run()
+    Info: Starts the main game loop, which accepts user input, handles packets
+          from the server, updates the game and renders everything to the
+          game's window.
+    Args: None.
+
+    PRIVATE process(sf::Event)
+    Info: Processes an event that occured (e.g. keyboard input, window focus
+          change) depending on the game's state and informs the server if
+          necessary.
+    ARGS: The event that occured supplied by the SFML library (sf::Event).
+
+    PRIVATE key_to_dir(sf::Keyboard::Key)
+    Info: Converts a keyboard key to a DIRECTION::dir variable if possible,
+          returns DIRECTION::NO_DIR if a key unrelated to movement was passed
+          (possible on pressing multiple keys).
+    ARGS: sf::Keyboard::Key enum variable corresponding to the key pressed.
+
+    PRIVATE move(int)
+    Info: Moves the tank corresponding to the given player id if possible
+          (i.e. there are no collisions in the new positions).
+          Informs the server if the player ID corresponds to the player
+          assigned to this instance of the Clien class.
+    ARGS: ID of the player the tank belongs to.
+
+    PRIVATE is_valid(sf::Vector2f, int)
+    Info: Checks if a point in space is a valid position for a tank of a given
+          ID.
+    ARGS: sf::Vector2f representing the point in space, ID of the player.
+          (ID is necessary for geting the hitbox of the tank.)
+
+    PRIVATE update()
+    Info: Updates the movement of all projectiles and tanks, checking if
+          the tank belonging to the client is destroyed by a projectile.
+    ARGS: None.
+
+    PRIVATE render()
+    Info: Draws every object (and possible text when the player is dead)
+          to the game's window.
+    ARGS: None.
+
+    PRIVATE handle_packet(sf::Packet&)
+    Info: Handles a single packet recieved from the server.
+    Note: For information for the protocol heads, see the file Protocol.hpp
+          or it's documentation file.
+    ARGS: Reference to the recieved packet.
+
+    ~Client()
+    Info: Destructor, informs the server about the player quitting and
+          closes the connection.
+    ARGS: None.
+
+Class member variables
+======================
+    plr_max_:    Constant containing the max number of players.
+    window_:     Reference to the game's window.
+    socket_:     TCP socket used to communicate with the server.
+    clock_:      Main game loop clock (used to force framerate).
+    shoot_cd_:   Clock used to time the cooldown for shooting.
+    frame_time_: Target time for one frame.
+    last_time_:  Time of the last frame.
+    cd_time_:    Time since the last projectile shot.
+    plr_:        Array of unique pointers to the tank objects.
+    shots_:      Array of all projectile objects.
+    state_:      The current game state.
+    lost_:       Text to be displayed when the player looses.
+    press_:      Text telling the player to press a key to leave/rejoin.
+    game_name_:  Game name text at the bottom bar.
+    font_:       Font used to draw text.
+    back_:       Bottom black bar used as background for score and names.
+    address_:    Address of the server.
+    name_:       Name of the player.
+    port_:       Port that the server listens at.
+    id_:         ID of this player.
+    running_:    Boolean variable indicating if the game is running.
+    focused_:    Boolean variable indicating if the window is focused.
+    rematch_:    Reference to the boolean variable indicating if the player
+                 wants to rejoin the server upon death.

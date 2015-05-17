@@ -32,10 +32,10 @@ class Client
 
         sf::RenderWindow&           window_;
         sf::TcpSocket               socket_;
-        sf::Clock                   clock_, shoot_cd;
+        sf::Clock                   clock_, shoot_cd_;
         sf::Time                    frame_time_{sf::seconds(1/60.f)};
         sf::Time                    last_time_{sf::seconds(0.f)};
-        sf::Time                    cd_time{sf::seconds(1.f)};
+        sf::Time                    cd_time_{sf::seconds(1.f)};
         std::unique_ptr<Tank>       plr_[MAX_PLR];
         std::vector<Projectile>     shots_;
         STATE                       state_{STATE::PLAYING};
