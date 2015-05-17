@@ -485,16 +485,6 @@ bool Client::handle_packet(sf::Packet& packet)
             plr_[id]->set_name(name);
             break;
         }
-        case PROTOCOL::AFK_CHECK:
-        {
-            packet.clear();
-
-            // Send response - reuse the id.
-            packet << PROTOCOL::AFK_RESPONSE << id32;
-            socket_.send(packet);
-            packet.clear();
-            break;
-        }
         case PROTOCOL::PLR_NEW_POSITION:
         {
             sf::Vector2f new_pos;

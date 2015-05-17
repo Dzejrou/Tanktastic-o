@@ -41,8 +41,7 @@ class Server
         std::string                             address_;
         int                                     port_, plr_max_{MAX_PLR};
         bool                                    running_{true};
-        bool                                    not_afk_[MAX_PLR];
-        sf::Time                                time_out_, mov_check_;
+        sf::Time                                mov_check_;
 };
 
 struct client

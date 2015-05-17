@@ -7,8 +7,7 @@
  * Param: Port which the players will connect to.
  */
 Server::Server(std::string a, int p)
-    : address_{a}, port_{p}, time_out_{sf::seconds(60.f)},
-      mov_check_{sf::seconds(1.f)}///60.f)}
+    : address_{a}, port_{p}, mov_check_{sf::seconds(1.f)}
 {
     listener_.listen(port_);
     selector_.add(listener_);
@@ -73,35 +72,6 @@ void Server::run()
 
         // Periodic checks.
         sf::Packet packet;
-        if(disc_clock_.getElapsedTime() >= time_out_)
-        {
-            std::cout << "[Status] AFK CHECK." << std::endl;
-            // Urge all clients to respond to the afk check and if they
-            // don't, kick them.
-            for(auto& c : clients_)
-            {
-                if(c != nullptr)
-                {
-                    not_afk_[c->id] = false;
-                    // The id is just a dummy.
-                    packet << PROTOCOL::AFK_CHECK
-                        << static_cast<uint32>(c->id);
-                    c->socket.send(packet);
-                    packet.clear();
-                    if(c->socket.receive(packet) == sf::Socket::Done)
-                        handle_client(packet, c->socket);
-                    if(!not_afk_[c->id])
-                    {
-                        std::cout << "[Status] Kicking client #" << c->id
-                            << std::endl;
-                        kick(c);
-                        remove_client(c->id);
-                    }
-                }
-            }
-            disc_clock_.restart();
-        }
-
         if(mov_check_clock_.getElapsedTime() >= mov_check_)
         {
             // This works as position correction, which accounts to player lag.
@@ -186,9 +156,6 @@ void Server::init(client& c)
         c.socket.send(packet);
         packet.clear();
     }
-
-    /* Set him to not afk if he just connected. */
-    not_afk_[c.id] = true;
 
     /* Send info about this player to the others. */
     packet.clear();
@@ -310,14 +277,6 @@ void Server::handle_client(sf::Packet& packet, sf::TcpSocket& sock)
             sf::Vector2f pos;
             packet >> pos;
             plr_[id]->setPosition(pos);
-            break;
-        }
-        case PROTOCOL::AFK_RESPONSE:
-        {
-            // This player is still playing.
-            not_afk_[id] = true;
-            std::cout << "[Status] Player #" << id <<
-                " is not afk." << std::endl;
             break;
         }
         default:
